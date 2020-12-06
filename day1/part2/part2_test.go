@@ -1,9 +1,28 @@
-package day1
+package day1part2
 
 import (
+	"adventofcode2020/utils/typeconverter"
+	"log"
 	"reflect"
+	"strings"
 	"testing"
+
+	"github.com/gobuffalo/packr/v2"
 )
+
+func getNumbersFromTextFile(path string, fileName string) []int {
+	box := packr.New("fileBox", path)
+	str, err := box.FindString(fileName)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	strArr := strings.Split(str, "\r\n")
+	intArr := typeconverter.StringArrayToIntArray(strArr)
+
+	return intArr
+}
 
 func TestFindThreeNumbersBySum(t *testing.T) {
 	sum := 19
@@ -16,7 +35,7 @@ func TestFindThreeNumbersBySum(t *testing.T) {
 }
 
 func TestCalculateProductOfThreeNumbersBySum(t *testing.T) {
-	numbers := getNumbersFromTextFile("./", "input.txt")
+	numbers := getNumbersFromTextFile("../", "input.txt")
 	want := 193598720
 	got := CalculateProductOfThreeNumbersBySum(numbers, 2020)
 

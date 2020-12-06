@@ -1,7 +1,6 @@
-package day2
+package day2part1
 
 import (
-	"adventofcode2020/utils"
 	"strconv"
 	"strings"
 )
@@ -21,11 +20,30 @@ type password struct {
 	policy passwordPolicy
 }
 
-func getPasswordsFromTextFile(path string, fileName string) []password {
-	strArr := utils.ReadLinesFromTextFile(path, fileName)
-	passwords := convertStrArrToPasswordsEntities(strArr)
+func getValidPasswords(passwords []password) []password {
+	var validPasswords []password
 
-	return passwords
+	for _, password := range passwords {
+		if !strings.Contains(password.phrase, password.policy.character) {
+			continue
+		}
+
+		characterOccurrences := 0
+
+		for _, char := range password.phrase {
+			charStr := string(char)
+
+			if charStr == password.policy.character {
+				characterOccurrences++
+			}
+		}
+
+		if characterOccurrences >= password.policy.occurrences.min && characterOccurrences <= password.policy.occurrences.max {
+			validPasswords = append(validPasswords, password)
+		}
+	}
+
+	return validPasswords
 }
 
 func convertStrArrToPasswordsEntities(strArr []string) []password {

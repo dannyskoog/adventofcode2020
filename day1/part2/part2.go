@@ -1,13 +1,14 @@
-package day1
+package day1part2
 
 import (
+	day1part1 "adventofcode2020/day1/part1"
 	"sort"
 )
 
 // CalculateProductOfThreeNumbersBySum calculates the product of two numbers who's sum matches the criteria
 func CalculateProductOfThreeNumbersBySum(numbers []int, sum int) int {
 	foundNumbers := findThreeNumbersBySum(numbers, sum)
-	product := calculateProductOfNumbers(foundNumbers)
+	product := day1part1.CalculateProductOfNumbers(foundNumbers)
 
 	return product
 }

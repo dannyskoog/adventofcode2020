@@ -1,11 +1,26 @@
-package day1
+package day1part1
 
 // CalculateProductOfTwoNumbersBySum calculates the product of two numbers who's sum matches the criteria
 func CalculateProductOfTwoNumbersBySum(numbers []int, sum int) int {
 	foundNumbers := findTwoNumbersBySum(numbers, sum)
-	product := calculateProductOfNumbers(foundNumbers)
+	product := CalculateProductOfNumbers(foundNumbers)
 
 	return product
+}
+
+// CalculateProductOfNumbers calculates the product of numbers
+func CalculateProductOfNumbers(numbers []int) int {
+	sum := 0
+
+	for _, num := range numbers {
+		if sum == 0 {
+			sum += num
+		} else {
+			sum *= num
+		}
+	}
+
+	return sum
 }
 
 func findTwoNumbersBySum(numbers []int, sum int) []int {
@@ -20,18 +35,4 @@ func findTwoNumbersBySum(numbers []int, sum int) []int {
 	}
 
 	return []int{}
-}
-
-func calculateProductOfNumbers(numbers []int) int {
-	sum := 0
-
-	for _, num := range numbers {
-		if sum == 0 {
-			sum += num
-		} else {
-			sum *= num
-		}
-	}
-
-	return sum
 }
