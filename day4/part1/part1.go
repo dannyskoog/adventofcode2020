@@ -5,28 +5,29 @@ import (
 	"strconv"
 )
 
-type passport struct {
-	passportID     string
-	countryID      int
-	issueYear      int
-	expirationYear int
-	birthYear      int
-	hairColor      string
-	eyeColor       string
-	height         string
+// Passport represents a passport
+type Passport struct {
+	PassportID     string
+	CountryID      int
+	IssueYear      int
+	ExpirationYear int
+	BirthYear      int
+	HairColor      string
+	EyeColor       string
+	Height         string
 }
 
-func getValidPassports(passports []passport) []passport {
-	validPassports := []passport{}
+func getValidPassports(passports []Passport) []Passport {
+	validPassports := []Passport{}
 
 	for _, passport := range passports {
-		if passport.passportID != "" &&
-			passport.issueYear != 0 &&
-			passport.expirationYear != 0 &&
-			passport.birthYear != 0 &&
-			passport.hairColor != "" &&
-			passport.eyeColor != "" &&
-			passport.height != "" {
+		if passport.PassportID != "" &&
+			passport.IssueYear != 0 &&
+			passport.ExpirationYear != 0 &&
+			passport.BirthYear != 0 &&
+			passport.HairColor != "" &&
+			passport.EyeColor != "" &&
+			passport.Height != "" {
 			validPassports = append(validPassports, passport)
 		}
 	}
@@ -34,8 +35,9 @@ func getValidPassports(passports []passport) []passport {
 	return validPassports
 }
 
-func convertStrArrToPassports(strArr []string) []passport {
-	passports := []passport{}
+// ConvertStrArrToPassports converts []string to []Passport
+func ConvertStrArrToPassports(strArr []string) []Passport {
+	passports := []Passport{}
 
 	for _, str := range strArr {
 		passport := convertStrToPassport(str)
@@ -45,8 +47,8 @@ func convertStrArrToPassports(strArr []string) []passport {
 	return passports
 }
 
-func convertStrToPassport(str string) passport {
-	passport := passport{}
+func convertStrToPassport(str string) Passport {
+	passport := Passport{}
 
 	r, _ := regexp.Compile(`([a-z]{3}):(#*\w+)`)
 
@@ -58,28 +60,28 @@ func convertStrToPassport(str string) passport {
 
 		switch fieldName {
 		case "pid":
-			passport.passportID = fieldVal
+			passport.PassportID = fieldVal
 			break
 		case "cid":
-			passport.countryID, _ = strconv.Atoi(fieldVal)
+			passport.CountryID, _ = strconv.Atoi(fieldVal)
 			break
 		case "iyr":
-			passport.issueYear, _ = strconv.Atoi(fieldVal)
+			passport.IssueYear, _ = strconv.Atoi(fieldVal)
 			break
 		case "eyr":
-			passport.expirationYear, _ = strconv.Atoi(fieldVal)
+			passport.ExpirationYear, _ = strconv.Atoi(fieldVal)
 			break
 		case "byr":
-			passport.birthYear, _ = strconv.Atoi(fieldVal)
+			passport.BirthYear, _ = strconv.Atoi(fieldVal)
 			break
 		case "hcl":
-			passport.hairColor = fieldVal
+			passport.HairColor = fieldVal
 			break
 		case "ecl":
-			passport.eyeColor = fieldVal
+			passport.EyeColor = fieldVal
 			break
 		case "hgt":
-			passport.height = fieldVal
+			passport.Height = fieldVal
 			break
 		}
 	}
