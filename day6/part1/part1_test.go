@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
-func getGroupsFromTextFile(path string, fileName string) []group {
+func getGroupsFromTextFile(path string, fileName string) []Group {
 	box := packr.New("fileBox", path)
 	str, err := box.FindString(fileName)
 
@@ -18,14 +18,14 @@ func getGroupsFromTextFile(path string, fileName string) []group {
 	}
 
 	strArr := strings.Split(str, "\r\n\r\n")
-	groups := convertStrArrToGroups(strArr)
+	groups := ConvertStrArrToGroups(strArr)
 
 	return groups
 }
 
 func TestConvertStrToPerson(t *testing.T) {
-	want := person{
-		questions: []string{
+	want := Person{
+		Questions: []string{
 			"a",
 			"b",
 			"c",
@@ -40,26 +40,26 @@ func TestConvertStrToPerson(t *testing.T) {
 }
 
 func TestConvertStrToGroup(t *testing.T) {
-	want := group{
-		people: []person{
-			person{
-				questions: []string{
+	want := Group{
+		People: []Person{
+			Person{
+				Questions: []string{
 					"a",
 					"b",
 					"c",
 					"x",
 				},
 			},
-			person{
-				questions: []string{
+			Person{
+				Questions: []string{
 					"a",
 					"b",
 					"c",
 					"y",
 				},
 			},
-			person{
-				questions: []string{
+			Person{
+				Questions: []string{
 					"a",
 					"b",
 					"c",
@@ -77,11 +77,11 @@ func TestConvertStrToGroup(t *testing.T) {
 }
 
 func TestConvertStrArrToGroups(t *testing.T) {
-	want := []group{
-		group{
-			people: []person{
-				person{
-					questions: []string{
+	want := []Group{
+		Group{
+			People: []Person{
+				Person{
+					Questions: []string{
 						"a",
 						"b",
 						"c",
@@ -89,76 +89,76 @@ func TestConvertStrArrToGroups(t *testing.T) {
 				},
 			},
 		},
-		group{
-			people: []person{
-				person{
-					questions: []string{
+		Group{
+			People: []Person{
+				Person{
+					Questions: []string{
 						"a",
 					},
 				},
-				person{
-					questions: []string{
+				Person{
+					Questions: []string{
 						"b",
 					},
 				},
-				person{
-					questions: []string{
+				Person{
+					Questions: []string{
 						"c",
 					},
 				},
 			},
 		},
-		group{
-			people: []person{
-				person{
-					questions: []string{
+		Group{
+			People: []Person{
+				Person{
+					Questions: []string{
 						"a",
 						"b",
 					},
 				},
-				person{
-					questions: []string{
+				Person{
+					Questions: []string{
 						"a",
 						"c",
 					},
 				},
 			},
 		},
-		group{
-			people: []person{
-				person{
-					questions: []string{
+		Group{
+			People: []Person{
+				Person{
+					Questions: []string{
 						"a",
 					},
 				},
-				person{
-					questions: []string{
+				Person{
+					Questions: []string{
 						"a",
 					},
 				},
-				person{
-					questions: []string{
+				Person{
+					Questions: []string{
 						"a",
 					},
 				},
-				person{
-					questions: []string{
+				Person{
+					Questions: []string{
 						"a",
 					},
 				},
 			},
 		},
-		group{
-			people: []person{
-				person{
-					questions: []string{
+		Group{
+			People: []Person{
+				Person{
+					Questions: []string{
 						"b",
 					},
 				},
 			},
 		},
 	}
-	got := convertStrArrToGroups([]string{
+	got := ConvertStrArrToGroups([]string{
 		"abc",
 		"a\r\nb\r\nc",
 		"ab\r\nac",
@@ -172,21 +172,21 @@ func TestConvertStrArrToGroups(t *testing.T) {
 }
 
 func TestGetUniqueQuestionsByGroup(t *testing.T) {
-	want := uniqueQuestions{
-		"a": true,
-		"b": true,
-		"c": true,
+	want := Questions{
+		"a": 2,
+		"b": 1,
+		"c": 1,
 	}
-	got := getUniqueQuestionsByGroup(group{
-		people: []person{
-			person{
-				questions: []string{
+	got := GetUniqueQuestionsByGroup(Group{
+		People: []Person{
+			Person{
+				Questions: []string{
 					"a",
 					"b",
 				},
 			},
-			person{
-				questions: []string{
+			Person{
+				Questions: []string{
 					"a",
 					"c",
 				},

@@ -4,40 +4,45 @@ import (
 	"strings"
 )
 
-type uniqueQuestions map[string]bool
+// Questions represents a collection of unique questions
+type Questions map[string]int
 
-type person struct {
-	questions []string
+// Person represents a person
+type Person struct {
+	Questions []string
 }
 
-type group struct {
-	people []person
+// Group represents a group of people
+type Group struct {
+	People []Person
 }
 
-func calculateSumOfUniqueQuestionsForGroups(groups []group) int {
+func calculateSumOfUniqueQuestionsForGroups(groups []Group) int {
 	sum := 0
 
 	for _, group := range groups {
-		sum += len(getUniqueQuestionsByGroup(group))
+		sum += len(GetUniqueQuestionsByGroup(group))
 	}
 
 	return sum
 }
 
-func getUniqueQuestionsByGroup(group group) uniqueQuestions {
-	uniqueQuestions := make(uniqueQuestions)
+// GetUniqueQuestionsByGroup returns unique questions by group
+func GetUniqueQuestionsByGroup(group Group) Questions {
+	uniqueQuestions := make(Questions)
 
-	for _, person := range group.people {
-		for _, question := range person.questions {
-			uniqueQuestions[question] = true
+	for _, person := range group.People {
+		for _, question := range person.Questions {
+			uniqueQuestions[question]++
 		}
 	}
 
 	return uniqueQuestions
 }
 
-func convertStrArrToGroups(strArr []string) []group {
-	groups := []group{}
+// ConvertStrArrToGroups converts []string to []Group
+func ConvertStrArrToGroups(strArr []string) []Group {
+	groups := []Group{}
 
 	for _, str := range strArr {
 		group := convertStrToGroup(str)
@@ -47,27 +52,27 @@ func convertStrArrToGroups(strArr []string) []group {
 	return groups
 }
 
-func convertStrToGroup(strGroup string) group {
-	group := group{
-		people: []person{},
+func convertStrToGroup(strGroup string) Group {
+	group := Group{
+		People: []Person{},
 	}
 	splitted := strings.Split(strGroup, "\r\n")
 
 	for _, strPerson := range splitted {
 		person := convertStrToPerson(strPerson)
-		group.people = append(group.people, person)
+		group.People = append(group.People, person)
 	}
 
 	return group
 }
 
-func convertStrToPerson(str string) person {
-	person := person{
-		questions: []string{},
+func convertStrToPerson(str string) Person {
+	person := Person{
+		Questions: []string{},
 	}
 
 	for _, char := range str {
-		person.questions = append(person.questions, string(char))
+		person.Questions = append(person.Questions, string(char))
 	}
 
 	return person
