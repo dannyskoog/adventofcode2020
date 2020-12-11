@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
-func getBoardingPassesFromTextFile(path string, fileName string) []boardingPass {
+func getBoardingPassesFromTextFile(path string, fileName string) []BoardingPass {
 	box := packr.New("fileBox", path)
 	str, err := box.FindString(fileName)
 
@@ -18,7 +18,7 @@ func getBoardingPassesFromTextFile(path string, fileName string) []boardingPass 
 	}
 
 	strArr := strings.Split(str, "\r\n")
-	boardingPasses := convertStrArrToBoardingPasses(strArr)
+	boardingPasses := ConvertStrArrToBoardingPasses(strArr)
 
 	return boardingPasses
 }
@@ -26,10 +26,10 @@ func getBoardingPassesFromTextFile(path string, fileName string) []boardingPass 
 func TestConvertCharToColumnDirection(t *testing.T) {
 	tests := []struct {
 		in   string
-		want columnDirection
+		want ColumnDirection
 	}{
-		{"L", columnDirectionLeft},
-		{"R", columnDirectionRight},
+		{"L", ColumnDirectionLeft},
+		{"R", ColumnDirectionRight},
 	}
 
 	for _, e := range tests {
@@ -44,10 +44,10 @@ func TestConvertCharToColumnDirection(t *testing.T) {
 func TestConvertCharToRowDirection(t *testing.T) {
 	tests := []struct {
 		in   string
-		want rowDirection
+		want RowDirection
 	}{
-		{"F", rowDirectionFront},
-		{"B", rowDirectionBack},
+		{"F", RowDirectionFront},
+		{"B", RowDirectionBack},
 	}
 
 	for _, e := range tests {
@@ -60,20 +60,20 @@ func TestConvertCharToRowDirection(t *testing.T) {
 }
 
 func TestConvertStrToBoardingPass(t *testing.T) {
-	want := boardingPass{
-		rowDirections: []rowDirection{
-			rowDirectionFront,
-			rowDirectionBack,
-			rowDirectionFront,
-			rowDirectionBack,
-			rowDirectionBack,
-			rowDirectionFront,
-			rowDirectionFront,
+	want := BoardingPass{
+		RowDirections: []RowDirection{
+			RowDirectionFront,
+			RowDirectionBack,
+			RowDirectionFront,
+			RowDirectionBack,
+			RowDirectionBack,
+			RowDirectionFront,
+			RowDirectionFront,
 		},
-		columnDirections: []columnDirection{
-			columnDirectionRight,
-			columnDirectionLeft,
-			columnDirectionRight,
+		ColumnDirections: []ColumnDirection{
+			ColumnDirectionRight,
+			ColumnDirectionLeft,
+			ColumnDirectionRight,
 		},
 	}
 
@@ -85,57 +85,57 @@ func TestConvertStrToBoardingPass(t *testing.T) {
 }
 
 func TestConvertStrArrToBoardingPasses(t *testing.T) {
-	want := []boardingPass{
-		boardingPass{
-			rowDirections: []rowDirection{
-				rowDirectionFront,
-				rowDirectionFront,
-				rowDirectionBack,
-				rowDirectionBack,
-				rowDirectionFront,
-				rowDirectionBack,
-				rowDirectionBack,
+	want := []BoardingPass{
+		BoardingPass{
+			RowDirections: []RowDirection{
+				RowDirectionFront,
+				RowDirectionFront,
+				RowDirectionBack,
+				RowDirectionBack,
+				RowDirectionFront,
+				RowDirectionBack,
+				RowDirectionBack,
 			},
-			columnDirections: []columnDirection{
-				columnDirectionRight,
-				columnDirectionRight,
-				columnDirectionRight,
-			},
-		},
-		boardingPass{
-			rowDirections: []rowDirection{
-				rowDirectionBack,
-				rowDirectionFront,
-				rowDirectionFront,
-				rowDirectionBack,
-				rowDirectionBack,
-				rowDirectionBack,
-				rowDirectionBack,
-			},
-			columnDirections: []columnDirection{
-				columnDirectionLeft,
-				columnDirectionLeft,
-				columnDirectionLeft,
+			ColumnDirections: []ColumnDirection{
+				ColumnDirectionRight,
+				ColumnDirectionRight,
+				ColumnDirectionRight,
 			},
 		},
-		boardingPass{
-			rowDirections: []rowDirection{
-				rowDirectionFront,
-				rowDirectionBack,
-				rowDirectionBack,
-				rowDirectionFront,
-				rowDirectionBack,
-				rowDirectionFront,
-				rowDirectionBack,
+		BoardingPass{
+			RowDirections: []RowDirection{
+				RowDirectionBack,
+				RowDirectionFront,
+				RowDirectionFront,
+				RowDirectionBack,
+				RowDirectionBack,
+				RowDirectionBack,
+				RowDirectionBack,
 			},
-			columnDirections: []columnDirection{
-				columnDirectionRight,
-				columnDirectionRight,
-				columnDirectionLeft,
+			ColumnDirections: []ColumnDirection{
+				ColumnDirectionLeft,
+				ColumnDirectionLeft,
+				ColumnDirectionLeft,
+			},
+		},
+		BoardingPass{
+			RowDirections: []RowDirection{
+				RowDirectionFront,
+				RowDirectionBack,
+				RowDirectionBack,
+				RowDirectionFront,
+				RowDirectionBack,
+				RowDirectionFront,
+				RowDirectionBack,
+			},
+			ColumnDirections: []ColumnDirection{
+				ColumnDirectionRight,
+				ColumnDirectionRight,
+				ColumnDirectionLeft,
 			},
 		},
 	}
-	got := convertStrArrToBoardingPasses([]string{
+	got := ConvertStrArrToBoardingPasses([]string{
 		"FFBBFBBRRR",
 		"BFFBBBBLLL",
 		"FBBFBFBRRL",
@@ -148,11 +148,11 @@ func TestConvertStrArrToBoardingPasses(t *testing.T) {
 
 func TestGetColumnNumberFromBoardingPass(t *testing.T) {
 	want := 5
-	got := getColumnNumberFromBoardingPass(boardingPass{
-		columnDirections: []columnDirection{
-			columnDirectionRight,
-			columnDirectionLeft,
-			columnDirectionRight,
+	got := GetColumnNumberFromBoardingPass(BoardingPass{
+		ColumnDirections: []ColumnDirection{
+			ColumnDirectionRight,
+			ColumnDirectionLeft,
+			ColumnDirectionRight,
 		},
 	})
 
@@ -163,15 +163,15 @@ func TestGetColumnNumberFromBoardingPass(t *testing.T) {
 
 func TestGetRowNumberFromBoardingPass(t *testing.T) {
 	want := 44
-	got := getRowNumberFromBoardingPass(boardingPass{
-		rowDirections: []rowDirection{
-			rowDirectionFront,
-			rowDirectionBack,
-			rowDirectionFront,
-			rowDirectionBack,
-			rowDirectionBack,
-			rowDirectionFront,
-			rowDirectionFront,
+	got := GetRowNumberFromBoardingPass(BoardingPass{
+		RowDirections: []RowDirection{
+			RowDirectionFront,
+			RowDirectionBack,
+			RowDirectionFront,
+			RowDirectionBack,
+			RowDirectionBack,
+			RowDirectionFront,
+			RowDirectionFront,
 		},
 	})
 
@@ -181,23 +181,8 @@ func TestGetRowNumberFromBoardingPass(t *testing.T) {
 }
 
 func TestGetSeatIDFromBoardingPass(t *testing.T) {
-	want := 820
-	got := getSeatIDFromBoardingPass(boardingPass{
-		rowDirections: []rowDirection{
-			rowDirectionBack,
-			rowDirectionBack,
-			rowDirectionFront,
-			rowDirectionFront,
-			rowDirectionBack,
-			rowDirectionBack,
-			rowDirectionFront,
-		},
-		columnDirections: []columnDirection{
-			columnDirectionRight,
-			columnDirectionLeft,
-			columnDirectionLeft,
-		},
-	})
+	want := 567
+	got := GetSeatIDFromRowAndColumnNumbers(70, 7)
 
 	if got != want {
 		t.Errorf("Seat ID was incorrect, got: %d, want: %d", got, want)
@@ -207,7 +192,7 @@ func TestGetSeatIDFromBoardingPass(t *testing.T) {
 func TestGetHighestSeatIDFromBoardingPasses(t *testing.T) {
 	boardingPasses := getBoardingPassesFromTextFile("../", "input.txt")
 	want := 861
-	got := getHighestSeatIDFromBoardingPasses(boardingPasses)
+	got := getHighestSeatIDFromBoardingPasses(boardingPasses, 128, 8)
 
 	if got != want {
 		t.Errorf("Highest seat ID was incorrect, got: %d, want: %d", got, want)

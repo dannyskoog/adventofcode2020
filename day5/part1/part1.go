@@ -5,53 +5,45 @@ import (
 	"sort"
 )
 
-type rowDirection int
+// RowDirection represents in which direction to go when traversing rows
+type RowDirection int
 
 const (
-	rowDirectionFront rowDirection = iota
-	rowDirectionBack
+	// RowDirectionFront represents a forward row direction
+	RowDirectionFront RowDirection = iota
+	// RowDirectionBack represents a backward row direction
+	RowDirectionBack
 )
 
-type columnDirection int
+// ColumnDirection represents in which direction to go when traversing columns
+type ColumnDirection int
 
 const (
-	columnDirectionLeft columnDirection = iota
-	columnDirectionRight
+	// ColumnDirectionLeft represents a left column direction
+	ColumnDirectionLeft ColumnDirection = iota
+	// ColumnDirectionRight represents a right column direction
+	ColumnDirectionRight
 )
 
-type boardingPass struct {
-	rowDirections    []rowDirection
-	columnDirections []columnDirection
+// BoardingPass represents a boarding pass
+type BoardingPass struct {
+	RowDirections    []RowDirection
+	ColumnDirections []ColumnDirection
 }
 
-func getHighestSeatIDFromBoardingPasses(boardingPasses []boardingPass) int {
-	seatIDs := []int{}
-
-	for _, boardingPass := range boardingPasses {
-		seatID := getSeatIDFromBoardingPass(boardingPass)
-		seatIDs = append(seatIDs, seatID)
-	}
-
-	sort.Ints(seatIDs)
-
-	return seatIDs[len(seatIDs)-1]
+// GetSeatIDFromRowAndColumnNumbers calculcates the seat ID based on a row- and column number
+func GetSeatIDFromRowAndColumnNumbers(rowNumber int, columnNumber int) int {
+	return rowNumber*8 + columnNumber
 }
 
-func getSeatIDFromBoardingPass(boardingPass boardingPass) int {
-	rowNumber := getRowNumberFromBoardingPass(boardingPass)
-	columnNumber := getColumnNumberFromBoardingPass(boardingPass)
-	seatID := rowNumber*8 + columnNumber
-
-	return seatID
-}
-
-func getRowNumberFromBoardingPass(boardingPass boardingPass) int {
+// GetRowNumberFromBoardingPass gets the row number for a boarding pass
+func GetRowNumberFromBoardingPass(boardingPass BoardingPass) int {
 	rangeStart, rangeEnd := 0.0, 127.0
 
-	for _, rowDirection := range boardingPass.rowDirections {
+	for _, rowDirection := range boardingPass.RowDirections {
 		rangeReduction := math.Ceil((rangeEnd - rangeStart) / 2)
 
-		if rowDirection == rowDirectionFront {
+		if rowDirection == RowDirectionFront {
 			rangeEnd -= rangeReduction
 		} else {
 			rangeStart += rangeReduction
@@ -65,13 +57,14 @@ func getRowNumberFromBoardingPass(boardingPass boardingPass) int {
 	return int(rangeStart)
 }
 
-func getColumnNumberFromBoardingPass(boardingPass boardingPass) int {
+// GetColumnNumberFromBoardingPass gets the column number for a boarding pass
+func GetColumnNumberFromBoardingPass(boardingPass BoardingPass) int {
 	rangeStart, rangeEnd := 0.0, 7.0
 
-	for _, columnDirection := range boardingPass.columnDirections {
+	for _, columnDirection := range boardingPass.ColumnDirections {
 		rangeReduction := math.Ceil((rangeEnd - rangeStart) / 2)
 
-		if columnDirection == columnDirectionLeft {
+		if columnDirection == ColumnDirectionLeft {
 			rangeEnd -= rangeReduction
 		} else {
 			rangeStart += rangeReduction
@@ -85,8 +78,9 @@ func getColumnNumberFromBoardingPass(boardingPass boardingPass) int {
 	return int(rangeStart)
 }
 
-func convertStrArrToBoardingPasses(strArr []string) []boardingPass {
-	boardingPasses := []boardingPass{}
+// ConvertStrArrToBoardingPasses converts a []string to []BoardingPass
+func ConvertStrArrToBoardingPasses(strArr []string) []BoardingPass {
+	boardingPasses := []BoardingPass{}
 
 	for _, str := range strArr {
 		boardingPass := convertStrToBoardingPass(str)
@@ -96,10 +90,25 @@ func convertStrArrToBoardingPasses(strArr []string) []boardingPass {
 	return boardingPasses
 }
 
-func convertStrToBoardingPass(str string) boardingPass {
-	boardingPass := boardingPass{
-		rowDirections:    []rowDirection{},
-		columnDirections: []columnDirection{},
+func getHighestSeatIDFromBoardingPasses(boardingPasses []BoardingPass, numberOfRows int, numberOfColumns int) int {
+	seatIDs := []int{}
+
+	for _, boardingPass := range boardingPasses {
+		rowNumber := GetRowNumberFromBoardingPass(boardingPass)
+		columnNumber := GetColumnNumberFromBoardingPass(boardingPass)
+		seatID := GetSeatIDFromRowAndColumnNumbers(rowNumber, columnNumber)
+		seatIDs = append(seatIDs, seatID)
+	}
+
+	sort.Ints(seatIDs)
+
+	return seatIDs[len(seatIDs)-1]
+}
+
+func convertStrToBoardingPass(str string) BoardingPass {
+	boardingPass := BoardingPass{
+		RowDirections:    []RowDirection{},
+		ColumnDirections: []ColumnDirection{},
 	}
 
 	for i, char := range str {
@@ -107,28 +116,28 @@ func convertStrToBoardingPass(str string) boardingPass {
 
 		if i < 7 {
 			rowDirection := convertCharToRowDirection(charStr)
-			boardingPass.rowDirections = append(boardingPass.rowDirections, rowDirection)
+			boardingPass.RowDirections = append(boardingPass.RowDirections, rowDirection)
 		} else {
 			columnDirection := convertCharToColumnDirection(charStr)
-			boardingPass.columnDirections = append(boardingPass.columnDirections, columnDirection)
+			boardingPass.ColumnDirections = append(boardingPass.ColumnDirections, columnDirection)
 		}
 	}
 
 	return boardingPass
 }
 
-func convertCharToRowDirection(char string) rowDirection {
+func convertCharToRowDirection(char string) RowDirection {
 	if char == "F" {
-		return rowDirectionFront
+		return RowDirectionFront
 	}
 
-	return rowDirectionBack
+	return RowDirectionBack
 }
 
-func convertCharToColumnDirection(char string) columnDirection {
+func convertCharToColumnDirection(char string) ColumnDirection {
 	if char == "L" {
-		return columnDirectionLeft
+		return ColumnDirectionLeft
 	}
 
-	return columnDirectionRight
+	return ColumnDirectionRight
 }
