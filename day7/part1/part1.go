@@ -6,19 +6,19 @@ import (
 	"strings"
 )
 
-type innerBag struct {
-	name   string
-	amount int
+type InnerBag struct {
+	Name   string
+	Amount int
 }
 
 type bag struct {
 	name      string
-	innerBags []innerBag
+	innerBags []InnerBag
 }
 
-type bagMap map[string][]innerBag
+type BagMap map[string][]InnerBag
 
-func getBagNamesByContainedBag(bags bagMap, bagName string) []string {
+func getBagNamesByContainedBag(bags BagMap, bagName string) []string {
 	bagNames := []string{}
 
 	for name, innerBags := range bags {
@@ -32,9 +32,9 @@ func getBagNamesByContainedBag(bags bagMap, bagName string) []string {
 	return bagNames
 }
 
-func areInnerBagsContainingBag(bags bagMap, innerBags []innerBag, bagName string) bool {
+func areInnerBagsContainingBag(bags BagMap, innerBags []InnerBag, bagName string) bool {
 	for _, innerBag := range innerBags {
-		if innerBag.name == bagName || areInnerBagsContainingBag(bags, bags[innerBag.name], bagName) {
+		if innerBag.Name == bagName || areInnerBagsContainingBag(bags, bags[innerBag.Name], bagName) {
 			return true
 		}
 	}
@@ -42,8 +42,8 @@ func areInnerBagsContainingBag(bags bagMap, innerBags []innerBag, bagName string
 	return false
 }
 
-func convertStrArrToBags(strArr []string) bagMap {
-	bags := make(bagMap)
+func ConvertStrArrToBags(strArr []string) BagMap {
+	bags := make(BagMap)
 
 	for _, str := range strArr {
 		bag := convertStrToBag(str)
@@ -58,7 +58,7 @@ func convertStrToBag(str string) bag {
 
 	bag := bag{
 		name:      splitted[0],
-		innerBags: []innerBag{},
+		innerBags: []InnerBag{},
 	}
 
 	innerBagsRegex, _ := regexp.Compile(`(\d)\s([a-z]+\s[a-z]+)\s[a-z]+`)
@@ -68,7 +68,7 @@ func convertStrToBag(str string) bag {
 		name := groups[2]
 		amount, _ := strconv.Atoi(groups[1])
 
-		innerBag := innerBag{
+		innerBag := InnerBag{
 			name,
 			amount,
 		}
