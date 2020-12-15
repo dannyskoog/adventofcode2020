@@ -18,14 +18,14 @@ func getNumbersFromTextFile(path string, fileName string) []int {
 	}
 
 	strArr := strings.Split(str, "\r\n")
-	numbers := convertStrArrToNumbers(strArr)
+	numbers := ConvertStrArrToNumbers(strArr)
 
 	return numbers
 }
 
 func TestConvertStrArrToNumbers(t *testing.T) {
 	want := []int{1, 2, 3, 4, 5}
-	got := convertStrArrToNumbers([]string{"1", "2", "3", "4", "5"})
+	got := ConvertStrArrToNumbers([]string{"1", "2", "3", "4", "5"})
 
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("Numbers were incorrect, got: %v, want: %v", got, want)
@@ -35,35 +35,35 @@ func TestConvertStrArrToNumbers(t *testing.T) {
 func TestIsNumberSumOfTwoOtherNumbers(t *testing.T) {
 	tests := []struct {
 		in struct {
-			first  []int
-			second int
+			numbers []int
+			number  int
 		}
 		want bool
 	}{
 		{
 			in: struct {
-				first  []int
-				second int
+				numbers []int
+				number  int
 			}{
-				first:  []int{35, 20, 15, 25, 47},
-				second: 40,
+				numbers: []int{35, 20, 15, 25, 47},
+				number:  40,
 			},
 			want: true,
 		},
 		{
 			in: struct {
-				first  []int
-				second int
+				numbers []int
+				number  int
 			}{
-				first:  []int{95, 102, 117, 150, 182},
-				second: 127,
+				numbers: []int{95, 102, 117, 150, 182},
+				number:  127,
 			},
 			want: false,
 		},
 	}
 
 	for _, e := range tests {
-		got := isNumberSumOfTwoOtherNumbers(e.in.first, e.in.second)
+		got := isNumberSumOfTwoOtherNumbers(e.in.numbers, e.in.number)
 
 		if got != e.want {
 			t.Errorf("Value was incorrect, got: %v, want: %v", got, e.want)
@@ -74,35 +74,35 @@ func TestIsNumberSumOfTwoOtherNumbers(t *testing.T) {
 func TestGetFirstInvalidNumber(t *testing.T) {
 	tests := []struct {
 		in struct {
-			first  []int
-			second int
+			numbers  []int
+			preamble int
 		}
 		want int
 	}{
 		{
 			in: struct {
-				first  []int
-				second int
+				numbers  []int
+				preamble int
 			}{
-				first:  []int{35, 20, 15, 25, 47, 40, 62, 55, 65, 95, 102, 117, 150, 182, 127, 219, 299, 277, 309, 576},
-				second: 5,
+				numbers:  []int{35, 20, 15, 25, 47, 40, 62, 55, 65, 95, 102, 117, 150, 182, 127, 219, 299, 277, 309, 576},
+				preamble: 5,
 			},
 			want: 127,
 		},
 		{
 			in: struct {
-				first  []int
-				second int
+				numbers  []int
+				preamble int
 			}{
-				first:  getNumbersFromTextFile("../", "input.txt"),
-				second: 25,
+				numbers:  getNumbersFromTextFile("../", "input.txt"),
+				preamble: 25,
 			},
 			want: 25918798,
 		},
 	}
 
 	for _, e := range tests {
-		got := getFirstInvalidNumber(e.in.first, e.in.second)
+		got := GetFirstInvalidNumber(e.in.numbers, e.in.preamble)
 
 		if got != e.want {
 			t.Errorf("First invalid number was incorrect, got: %d, want: %d", got, e.want)

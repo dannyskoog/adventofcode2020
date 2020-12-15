@@ -4,7 +4,8 @@ import (
 	"strconv"
 )
 
-func getFirstInvalidNumber(numbers []int, preambleCount int) int {
+// GetFirstInvalidNumber returns the first invalid number
+func GetFirstInvalidNumber(numbers []int, preambleCount int) int {
 	for i := range numbers {
 		previousNumbers, numberToCheck := numbers[i:i+preambleCount], numbers[i+preambleCount]
 		isNumberValid := isNumberSumOfTwoOtherNumbers(previousNumbers, numberToCheck)
@@ -15,6 +16,18 @@ func getFirstInvalidNumber(numbers []int, preambleCount int) int {
 	}
 
 	panic("No invalid number was found")
+}
+
+// ConvertStrArrToNumbers converts []string to []int
+func ConvertStrArrToNumbers(strArr []string) []int {
+	numbers := []int{}
+
+	for _, numberStr := range strArr {
+		number, _ := strconv.Atoi(numberStr)
+		numbers = append(numbers, number)
+	}
+
+	return numbers
 }
 
 func isNumberSumOfTwoOtherNumbers(numbers []int, number int) bool {
@@ -29,15 +42,4 @@ func isNumberSumOfTwoOtherNumbers(numbers []int, number int) bool {
 	}
 
 	return false
-}
-
-func convertStrArrToNumbers(strArr []string) []int {
-	numbers := []int{}
-
-	for _, numberStr := range strArr {
-		number, _ := strconv.Atoi(numberStr)
-		numbers = append(numbers, number)
-	}
-
-	return numbers
 }
