@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
-func getInstructionsFromTextFile(path string, fileName string) []instruction {
+func getInstructionsFromTextFile(path string, fileName string) []Instruction {
 	box := packr.New("fileBox", path)
 	str, err := box.FindString(fileName)
 
@@ -18,7 +18,7 @@ func getInstructionsFromTextFile(path string, fileName string) []instruction {
 	}
 
 	strArr := strings.Split(str, "\r\n")
-	instructions := convertStrArrToInstructions(strArr)
+	instructions := ConvertStrArrToInstructions(strArr)
 
 	return instructions
 }
@@ -26,11 +26,11 @@ func getInstructionsFromTextFile(path string, fileName string) []instruction {
 func TestConvertStrToOperation(t *testing.T) {
 	tests := []struct {
 		in   string
-		want operation
+		want Operation
 	}{
-		{in: "acc", want: accumulate},
-		{in: "jmp", want: jump},
-		{in: "nop", want: none},
+		{in: "acc", want: Accumulate},
+		{in: "jmp", want: Jump},
+		{in: "nop", want: None},
 	}
 
 	for _, e := range tests {
@@ -45,27 +45,27 @@ func TestConvertStrToOperation(t *testing.T) {
 func TestConvertStrToInstruction(t *testing.T) {
 	tests := []struct {
 		in   string
-		want instruction
+		want Instruction
 	}{
 		{
 			in: "acc +1",
-			want: instruction{
-				operation: accumulate,
-				argument:  1,
+			want: Instruction{
+				Operation: Accumulate,
+				Argument:  1,
 			},
 		},
 		{
 			in: "jmp -3",
-			want: instruction{
-				operation: jump,
-				argument:  -3,
+			want: Instruction{
+				Operation: Jump,
+				Argument:  -3,
 			},
 		},
 		{
 			in: "nop +0",
-			want: instruction{
-				operation: none,
-				argument:  0,
+			want: Instruction{
+				Operation: None,
+				Argument:  0,
 			},
 		},
 	}
@@ -80,21 +80,21 @@ func TestConvertStrToInstruction(t *testing.T) {
 }
 
 func TestConvertStrArrToInstructions(t *testing.T) {
-	want := []instruction{
-		instruction{
-			operation: none,
-			argument:  0,
+	want := []Instruction{
+		Instruction{
+			Operation: None,
+			Argument:  0,
 		},
-		instruction{
-			operation: accumulate,
-			argument:  1,
+		Instruction{
+			Operation: Accumulate,
+			Argument:  1,
 		},
-		instruction{
-			operation: jump,
-			argument:  4,
+		Instruction{
+			Operation: Jump,
+			Argument:  4,
 		},
 	}
-	got := convertStrArrToInstructions([]string{
+	got := ConvertStrArrToInstructions([]string{
 		"nop +0",
 		"acc +1",
 		"jmp +4",
@@ -119,46 +119,46 @@ acc +6
 
 func TestGetAccumulatedValueBeforeInstructionsAreRepeated(t *testing.T) {
 	tests := []struct {
-		in   []instruction
+		in   []Instruction
 		want int
 	}{
 		{
-			in: []instruction{
-				instruction{
-					operation: none,
-					argument:  0,
+			in: []Instruction{
+				Instruction{
+					Operation: None,
+					Argument:  0,
 				},
-				instruction{
-					operation: accumulate,
-					argument:  1,
+				Instruction{
+					Operation: Accumulate,
+					Argument:  1,
 				},
-				instruction{
-					operation: jump,
-					argument:  4,
+				Instruction{
+					Operation: Jump,
+					Argument:  4,
 				},
-				instruction{
-					operation: accumulate,
-					argument:  3,
+				Instruction{
+					Operation: Accumulate,
+					Argument:  3,
 				},
-				instruction{
-					operation: jump,
-					argument:  -3,
+				Instruction{
+					Operation: Jump,
+					Argument:  -3,
 				},
-				instruction{
-					operation: accumulate,
-					argument:  -99,
+				Instruction{
+					Operation: Accumulate,
+					Argument:  -99,
 				},
-				instruction{
-					operation: accumulate,
-					argument:  1,
+				Instruction{
+					Operation: Accumulate,
+					Argument:  1,
 				},
-				instruction{
-					operation: jump,
-					argument:  -4,
+				Instruction{
+					Operation: Jump,
+					Argument:  -4,
 				},
-				instruction{
-					operation: accumulate,
-					argument:  6,
+				Instruction{
+					Operation: Accumulate,
+					Argument:  6,
 				},
 			},
 			want: 5,

@@ -6,20 +6,20 @@ import (
 	"strings"
 )
 
-type operation string
+type Operation string
 
 const (
-	accumulate operation = "acc"
-	jump                 = "jmp"
-	none                 = "nop"
+	Accumulate Operation = "acc"
+	Jump                 = "jmp"
+	None                 = "nop"
 )
 
-type instruction struct {
-	operation operation
-	argument  int
+type Instruction struct {
+	Operation Operation
+	Argument  int
 }
 
-func getAccumulatedValueBeforeInstructionsAreRepeated(instructions []instruction) int {
+func getAccumulatedValueBeforeInstructionsAreRepeated(instructions []Instruction) int {
 	visitedIndices := make(map[int]bool)
 	currentIndex := 0
 	accumulatedValue := 0
@@ -33,14 +33,14 @@ func getAccumulatedValueBeforeInstructionsAreRepeated(instructions []instruction
 
 		currentInstruction := instructions[currentIndex]
 
-		switch currentInstruction.operation {
-		case jump:
-			currentIndex += currentInstruction.argument
+		switch currentInstruction.Operation {
+		case Jump:
+			currentIndex += currentInstruction.Argument
 			break
-		case accumulate:
+		case Accumulate:
 			currentIndex++
-			accumulatedValue += currentInstruction.argument
-		case none:
+			accumulatedValue += currentInstruction.Argument
+		case None:
 			currentIndex++
 		}
 	}
@@ -48,8 +48,8 @@ func getAccumulatedValueBeforeInstructionsAreRepeated(instructions []instruction
 	return accumulatedValue
 }
 
-func convertStrArrToInstructions(strArr []string) []instruction {
-	instructions := []instruction{}
+func ConvertStrArrToInstructions(strArr []string) []Instruction {
+	instructions := []Instruction{}
 
 	for _, str := range strArr {
 		instruction := convertStrToInstruction(str)
@@ -59,29 +59,29 @@ func convertStrArrToInstructions(strArr []string) []instruction {
 	return instructions
 }
 
-func convertStrToInstruction(str string) instruction {
+func convertStrToInstruction(str string) Instruction {
 	splitted := strings.Split(str, " ")
 	operation := convertStrToOperation(splitted[0])
 	argument, _ := strconv.Atoi(splitted[1])
 
-	return instruction{
+	return Instruction{
 		operation,
 		argument,
 	}
 }
 
-func convertStrToOperation(str string) operation {
-	var operation operation
+func convertStrToOperation(str string) Operation {
+	var operation Operation
 
 	switch str {
-	case string(accumulate):
-		operation = accumulate
+	case string(Accumulate):
+		operation = Accumulate
 		break
-	case string(jump):
-		operation = jump
+	case string(Jump):
+		operation = Jump
 		break
-	case string(none):
-		operation = none
+	case string(None):
+		operation = None
 		break
 	default:
 		log.Fatal("String didn't match any operation")
