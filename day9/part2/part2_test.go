@@ -1,7 +1,7 @@
 package day9part2
 
 import (
-	day9part1 "adventofcode2020/day9/part1"
+	"adventofcode2020/utils/typeconverter"
 	"log"
 	"reflect"
 	"strings"
@@ -19,7 +19,7 @@ func getNumbersFromTextFile(path string, fileName string) []int {
 	}
 
 	strArr := strings.Split(str, "\r\n")
-	numbers := day9part1.ConvertStrArrToNumbers(strArr)
+	numbers := typeconverter.StringArrayToIntArray(strArr)
 
 	return numbers
 }

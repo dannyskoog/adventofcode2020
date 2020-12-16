@@ -1,8 +1,8 @@
 package day9part1
 
 import (
+	"adventofcode2020/utils/typeconverter"
 	"log"
-	"reflect"
 	"strings"
 	"testing"
 
@@ -18,18 +18,9 @@ func getNumbersFromTextFile(path string, fileName string) []int {
 	}
 
 	strArr := strings.Split(str, "\r\n")
-	numbers := ConvertStrArrToNumbers(strArr)
+	numbers := typeconverter.StringArrayToIntArray(strArr)
 
 	return numbers
-}
-
-func TestConvertStrArrToNumbers(t *testing.T) {
-	want := []int{1, 2, 3, 4, 5}
-	got := ConvertStrArrToNumbers([]string{"1", "2", "3", "4", "5"})
-
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Numbers were incorrect, got: %v, want: %v", got, want)
-	}
 }
 
 func TestIsNumberSumOfTwoOtherNumbers(t *testing.T) {
