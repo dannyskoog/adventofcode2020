@@ -1,21 +1,27 @@
 package day11part1
 
-type positionType string
+// PositionType represents the type of a position in a grid
+type PositionType string
 
 const (
-	floor        positionType = "."
-	emptySeat                 = "L"
-	occupiedSeat              = "#"
+	// Floor represents floor in a grid
+	Floor PositionType = "."
+	// EmptySeat represents an empty seat in a grid
+	EmptySeat = "L"
+	// OccupiedSeat represents an occupied saet in a grid
+	OccupiedSeat = "#"
 )
 
-type seatGrid map[int]map[int]positionType
+// SeatGrid represents a grid of seats
+type SeatGrid map[int]map[int]PositionType
 
-func getOccupiedSeatsCountByGrid(grid seatGrid) int {
+// GetOccupiedSeatsCountByGrid returns occupied seats count by grid
+func GetOccupiedSeatsCountByGrid(grid SeatGrid) int {
 	occupiedSeatsCount := 0
 
 	for y := range grid {
 		for x := range grid[y] {
-			if grid[y][x] == occupiedSeat {
+			if grid[y][x] == OccupiedSeat {
 				occupiedSeatsCount++
 			}
 		}
@@ -24,22 +30,22 @@ func getOccupiedSeatsCountByGrid(grid seatGrid) int {
 	return occupiedSeatsCount
 }
 
-func simulateSeatingArea(grid seatGrid) seatGrid {
-	updatedGrid := deepCopyGrid(grid)
+func simulateSeatingArea(grid SeatGrid) SeatGrid {
+	updatedGrid := DeepCopyGrid(grid)
 	isGridUpdated := false
 
 	for y := range grid {
 		for x := range grid[y] {
 			switch grid[y][x] {
-			case emptySeat:
+			case EmptySeat:
 				if getNumberOfOccupiedAdjacentSeats(grid, y, x) == 0 {
-					updatedGrid[y][x] = occupiedSeat
+					updatedGrid[y][x] = OccupiedSeat
 					isGridUpdated = true
 				}
 				break
-			case occupiedSeat:
+			case OccupiedSeat:
 				if getNumberOfOccupiedAdjacentSeats(grid, y, x) >= 4 {
-					updatedGrid[y][x] = emptySeat
+					updatedGrid[y][x] = EmptySeat
 					isGridUpdated = true
 				}
 				break
@@ -54,9 +60,9 @@ func simulateSeatingArea(grid seatGrid) seatGrid {
 	return simulateSeatingArea(updatedGrid)
 }
 
-func getNumberOfOccupiedAdjacentSeats(grid seatGrid, y int, x int) int {
+func getNumberOfOccupiedAdjacentSeats(grid SeatGrid, y int, x int) int {
 	numberOfOccupiedSeats := 0
-	adjacentSeats := []positionType{
+	adjacentSeats := []PositionType{
 		grid[y][x+1],   // Right
 		grid[y][x-1],   // Left
 		grid[y-1][x],   // Top
@@ -68,7 +74,7 @@ func getNumberOfOccupiedAdjacentSeats(grid seatGrid, y int, x int) int {
 	}
 
 	for _, seat := range adjacentSeats {
-		if seat == occupiedSeat {
+		if seat == OccupiedSeat {
 			numberOfOccupiedSeats++
 		}
 	}
@@ -76,11 +82,12 @@ func getNumberOfOccupiedAdjacentSeats(grid seatGrid, y int, x int) int {
 	return numberOfOccupiedSeats
 }
 
-func convertStrArrToGrid(strArr []string) seatGrid {
-	grid := make(seatGrid, len(strArr))
+// ConvertStrArrToGrid converts []string to seatGrid
+func ConvertStrArrToGrid(strArr []string) SeatGrid {
+	grid := make(SeatGrid, len(strArr))
 
 	for i, str := range strArr {
-		grid[i] = make(map[int]positionType, len(str))
+		grid[i] = make(map[int]PositionType, len(str))
 
 		for j, char := range str {
 			positionType := convertCharToPositionType(string(char))
@@ -91,24 +98,25 @@ func convertStrArrToGrid(strArr []string) seatGrid {
 	return grid
 }
 
-func convertCharToPositionType(char string) positionType {
+func convertCharToPositionType(char string) PositionType {
 	switch char {
-	case string(floor):
-		return floor
-	case string(emptySeat):
-		return emptySeat
-	case string(occupiedSeat):
-		return occupiedSeat
+	case string(Floor):
+		return Floor
+	case string(EmptySeat):
+		return EmptySeat
+	case string(OccupiedSeat):
+		return OccupiedSeat
 	}
 
 	panic("Could not convert char to position type")
 }
 
-func deepCopyGrid(source seatGrid) seatGrid {
-	target := make(seatGrid, len(source))
+// DeepCopyGrid performs a deep copy of a grid
+func DeepCopyGrid(source SeatGrid) SeatGrid {
+	target := make(SeatGrid, len(source))
 
 	for outerKey, outerValue := range source {
-		target[outerKey] = make(map[int]positionType, len(outerValue))
+		target[outerKey] = make(map[int]PositionType, len(outerValue))
 
 		for innerKey, innerValue := range outerValue {
 			target[outerKey][innerKey] = innerValue

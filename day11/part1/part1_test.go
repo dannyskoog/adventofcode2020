@@ -9,7 +9,7 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
-func getSeatGridFromTextFile(path string, fileName string) seatGrid {
+func getSeatGridFromTextFile(path string, fileName string) SeatGrid {
 	box := packr.New("fileBox", path)
 	str, err := box.FindString(fileName)
 
@@ -18,7 +18,7 @@ func getSeatGridFromTextFile(path string, fileName string) seatGrid {
 	}
 
 	strArr := strings.Split(str, "\r\n")
-	grid := convertStrArrToGrid(strArr)
+	grid := ConvertStrArrToGrid(strArr)
 
 	return grid
 }
@@ -26,19 +26,19 @@ func getSeatGridFromTextFile(path string, fileName string) seatGrid {
 func TestConvertCharToPositionType(t *testing.T) {
 	tests := []struct {
 		in   string
-		want positionType
+		want PositionType
 	}{
 		{
 			in:   ".",
-			want: floor,
+			want: Floor,
 		},
 		{
 			in:   "L",
-			want: emptySeat,
+			want: EmptySeat,
 		},
 		{
 			in:   "#",
-			want: occupiedSeat,
+			want: OccupiedSeat,
 		},
 	}
 
@@ -52,19 +52,19 @@ func TestConvertCharToPositionType(t *testing.T) {
 }
 
 func TestConvertStrArrToGrid(t *testing.T) {
-	want := seatGrid{
-		0: {0: occupiedSeat, 1: floor, 2: occupiedSeat, 3: emptySeat, 4: floor, 5: emptySeat, 6: occupiedSeat, 7: floor, 8: occupiedSeat, 9: occupiedSeat},
-		1: {0: occupiedSeat, 1: emptySeat, 2: emptySeat, 3: emptySeat, 4: occupiedSeat, 5: emptySeat, 6: emptySeat, 7: floor, 8: emptySeat, 9: occupiedSeat},
-		2: {0: emptySeat, 1: floor, 2: emptySeat, 3: floor, 4: emptySeat, 5: floor, 6: floor, 7: occupiedSeat, 8: floor, 9: floor},
-		3: {0: occupiedSeat, 1: emptySeat, 2: emptySeat, 3: emptySeat, 4: floor, 5: occupiedSeat, 6: occupiedSeat, 7: floor, 8: emptySeat, 9: occupiedSeat},
-		4: {0: occupiedSeat, 1: floor, 2: emptySeat, 3: emptySeat, 4: floor, 5: emptySeat, 6: emptySeat, 7: floor, 8: emptySeat, 9: emptySeat},
-		5: {0: occupiedSeat, 1: floor, 2: emptySeat, 3: emptySeat, 4: occupiedSeat, 5: emptySeat, 6: occupiedSeat, 7: floor, 8: occupiedSeat, 9: occupiedSeat},
-		6: {0: floor, 1: floor, 2: emptySeat, 3: floor, 4: emptySeat, 5: floor, 6: floor, 7: floor, 8: floor, 9: floor},
-		7: {0: occupiedSeat, 1: emptySeat, 2: occupiedSeat, 3: emptySeat, 4: emptySeat, 5: emptySeat, 6: emptySeat, 7: occupiedSeat, 8: emptySeat, 9: occupiedSeat},
-		8: {0: occupiedSeat, 1: floor, 2: emptySeat, 3: emptySeat, 4: emptySeat, 5: emptySeat, 6: emptySeat, 7: emptySeat, 8: floor, 9: emptySeat},
-		9: {0: occupiedSeat, 1: floor, 2: occupiedSeat, 3: emptySeat, 4: occupiedSeat, 5: emptySeat, 6: occupiedSeat, 7: floor, 8: occupiedSeat, 9: occupiedSeat},
+	want := SeatGrid{
+		0: {0: OccupiedSeat, 1: Floor, 2: OccupiedSeat, 3: EmptySeat, 4: Floor, 5: EmptySeat, 6: OccupiedSeat, 7: Floor, 8: OccupiedSeat, 9: OccupiedSeat},
+		1: {0: OccupiedSeat, 1: EmptySeat, 2: EmptySeat, 3: EmptySeat, 4: OccupiedSeat, 5: EmptySeat, 6: EmptySeat, 7: Floor, 8: EmptySeat, 9: OccupiedSeat},
+		2: {0: EmptySeat, 1: Floor, 2: EmptySeat, 3: Floor, 4: EmptySeat, 5: Floor, 6: Floor, 7: OccupiedSeat, 8: Floor, 9: Floor},
+		3: {0: OccupiedSeat, 1: EmptySeat, 2: EmptySeat, 3: EmptySeat, 4: Floor, 5: OccupiedSeat, 6: OccupiedSeat, 7: Floor, 8: EmptySeat, 9: OccupiedSeat},
+		4: {0: OccupiedSeat, 1: Floor, 2: EmptySeat, 3: EmptySeat, 4: Floor, 5: EmptySeat, 6: EmptySeat, 7: Floor, 8: EmptySeat, 9: EmptySeat},
+		5: {0: OccupiedSeat, 1: Floor, 2: EmptySeat, 3: EmptySeat, 4: OccupiedSeat, 5: EmptySeat, 6: OccupiedSeat, 7: Floor, 8: OccupiedSeat, 9: OccupiedSeat},
+		6: {0: Floor, 1: Floor, 2: EmptySeat, 3: Floor, 4: EmptySeat, 5: Floor, 6: Floor, 7: Floor, 8: Floor, 9: Floor},
+		7: {0: OccupiedSeat, 1: EmptySeat, 2: OccupiedSeat, 3: EmptySeat, 4: EmptySeat, 5: EmptySeat, 6: EmptySeat, 7: OccupiedSeat, 8: EmptySeat, 9: OccupiedSeat},
+		8: {0: OccupiedSeat, 1: Floor, 2: EmptySeat, 3: EmptySeat, 4: EmptySeat, 5: EmptySeat, 6: EmptySeat, 7: EmptySeat, 8: Floor, 9: EmptySeat},
+		9: {0: OccupiedSeat, 1: Floor, 2: OccupiedSeat, 3: EmptySeat, 4: OccupiedSeat, 5: EmptySeat, 6: OccupiedSeat, 7: Floor, 8: OccupiedSeat, 9: OccupiedSeat},
 	}
-	got := convertStrArrToGrid([]string{
+	got := ConvertStrArrToGrid([]string{
 		"#.#L.L#.##",
 		"#LLL#LL.L#",
 		"L.L.L..#..",
@@ -83,7 +83,7 @@ func TestConvertStrArrToGrid(t *testing.T) {
 }
 
 func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
-	grid := convertStrArrToGrid([]string{
+	grid := ConvertStrArrToGrid([]string{
 		"#.#L.L#.##",
 		"#LLL#LL.L#",
 		"L.L.L..#..",
@@ -97,7 +97,7 @@ func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
 	})
 	tests := []struct {
 		in struct {
-			grid seatGrid
+			grid SeatGrid
 			y    int
 			x    int
 		}
@@ -105,7 +105,7 @@ func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
 	}{
 		{
 			in: struct {
-				grid seatGrid
+				grid SeatGrid
 				y    int
 				x    int
 			}{
@@ -117,7 +117,7 @@ func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
 		},
 		{
 			in: struct {
-				grid seatGrid
+				grid SeatGrid
 				y    int
 				x    int
 			}{
@@ -129,7 +129,7 @@ func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
 		},
 		{
 			in: struct {
-				grid seatGrid
+				grid SeatGrid
 				y    int
 				x    int
 			}{
@@ -141,7 +141,7 @@ func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
 		},
 		{
 			in: struct {
-				grid seatGrid
+				grid SeatGrid
 				y    int
 				x    int
 			}{
@@ -163,7 +163,7 @@ func TestGetNumberOfOccupiedAdjacentSeats(t *testing.T) {
 }
 
 func TestSimulateSeatingArea(t *testing.T) {
-	grid := convertStrArrToGrid([]string{
+	grid := ConvertStrArrToGrid([]string{
 		"L.LL.LL.LL",
 		"LLLLLLL.LL",
 		"L.L.L..L..",
@@ -175,17 +175,17 @@ func TestSimulateSeatingArea(t *testing.T) {
 		"L.LLLLLL.L",
 		"L.LLLLL.LL",
 	})
-	want := seatGrid{
-		0: {0: occupiedSeat, 1: floor, 2: occupiedSeat, 3: emptySeat, 4: floor, 5: emptySeat, 6: occupiedSeat, 7: floor, 8: occupiedSeat, 9: occupiedSeat},
-		1: {0: occupiedSeat, 1: emptySeat, 2: emptySeat, 3: emptySeat, 4: occupiedSeat, 5: emptySeat, 6: emptySeat, 7: floor, 8: emptySeat, 9: occupiedSeat},
-		2: {0: emptySeat, 1: floor, 2: occupiedSeat, 3: floor, 4: emptySeat, 5: floor, 6: floor, 7: occupiedSeat, 8: floor, 9: floor},
-		3: {0: occupiedSeat, 1: emptySeat, 2: occupiedSeat, 3: occupiedSeat, 4: floor, 5: occupiedSeat, 6: occupiedSeat, 7: floor, 8: emptySeat, 9: occupiedSeat},
-		4: {0: occupiedSeat, 1: floor, 2: occupiedSeat, 3: emptySeat, 4: floor, 5: emptySeat, 6: emptySeat, 7: floor, 8: emptySeat, 9: emptySeat},
-		5: {0: occupiedSeat, 1: floor, 2: occupiedSeat, 3: emptySeat, 4: occupiedSeat, 5: emptySeat, 6: occupiedSeat, 7: floor, 8: occupiedSeat, 9: occupiedSeat},
-		6: {0: floor, 1: floor, 2: emptySeat, 3: floor, 4: emptySeat, 5: floor, 6: floor, 7: floor, 8: floor, 9: floor},
-		7: {0: occupiedSeat, 1: emptySeat, 2: occupiedSeat, 3: emptySeat, 4: occupiedSeat, 5: occupiedSeat, 6: emptySeat, 7: occupiedSeat, 8: emptySeat, 9: occupiedSeat},
-		8: {0: occupiedSeat, 1: floor, 2: emptySeat, 3: emptySeat, 4: emptySeat, 5: emptySeat, 6: emptySeat, 7: emptySeat, 8: floor, 9: emptySeat},
-		9: {0: occupiedSeat, 1: floor, 2: occupiedSeat, 3: emptySeat, 4: occupiedSeat, 5: emptySeat, 6: occupiedSeat, 7: floor, 8: occupiedSeat, 9: occupiedSeat},
+	want := SeatGrid{
+		0: {0: OccupiedSeat, 1: Floor, 2: OccupiedSeat, 3: EmptySeat, 4: Floor, 5: EmptySeat, 6: OccupiedSeat, 7: Floor, 8: OccupiedSeat, 9: OccupiedSeat},
+		1: {0: OccupiedSeat, 1: EmptySeat, 2: EmptySeat, 3: EmptySeat, 4: OccupiedSeat, 5: EmptySeat, 6: EmptySeat, 7: Floor, 8: EmptySeat, 9: OccupiedSeat},
+		2: {0: EmptySeat, 1: Floor, 2: OccupiedSeat, 3: Floor, 4: EmptySeat, 5: Floor, 6: Floor, 7: OccupiedSeat, 8: Floor, 9: Floor},
+		3: {0: OccupiedSeat, 1: EmptySeat, 2: OccupiedSeat, 3: OccupiedSeat, 4: Floor, 5: OccupiedSeat, 6: OccupiedSeat, 7: Floor, 8: EmptySeat, 9: OccupiedSeat},
+		4: {0: OccupiedSeat, 1: Floor, 2: OccupiedSeat, 3: EmptySeat, 4: Floor, 5: EmptySeat, 6: EmptySeat, 7: Floor, 8: EmptySeat, 9: EmptySeat},
+		5: {0: OccupiedSeat, 1: Floor, 2: OccupiedSeat, 3: EmptySeat, 4: OccupiedSeat, 5: EmptySeat, 6: OccupiedSeat, 7: Floor, 8: OccupiedSeat, 9: OccupiedSeat},
+		6: {0: Floor, 1: Floor, 2: EmptySeat, 3: Floor, 4: EmptySeat, 5: Floor, 6: Floor, 7: Floor, 8: Floor, 9: Floor},
+		7: {0: OccupiedSeat, 1: EmptySeat, 2: OccupiedSeat, 3: EmptySeat, 4: OccupiedSeat, 5: OccupiedSeat, 6: EmptySeat, 7: OccupiedSeat, 8: EmptySeat, 9: OccupiedSeat},
+		8: {0: OccupiedSeat, 1: Floor, 2: EmptySeat, 3: EmptySeat, 4: EmptySeat, 5: EmptySeat, 6: EmptySeat, 7: EmptySeat, 8: Floor, 9: EmptySeat},
+		9: {0: OccupiedSeat, 1: Floor, 2: OccupiedSeat, 3: EmptySeat, 4: OccupiedSeat, 5: EmptySeat, 6: OccupiedSeat, 7: Floor, 8: OccupiedSeat, 9: OccupiedSeat},
 	}
 	got := simulateSeatingArea(grid)
 
@@ -196,12 +196,12 @@ func TestSimulateSeatingArea(t *testing.T) {
 
 func TestGetOccupiedSeatsCountByGrid(t *testing.T) {
 	tests := []struct {
-		in   seatGrid
+		in   SeatGrid
 		want int
 	}{
 		{
 			in: simulateSeatingArea(
-				convertStrArrToGrid([]string{
+				ConvertStrArrToGrid([]string{
 					"L.LL.LL.LL",
 					"LLLLLLL.LL",
 					"L.L.L..L..",
@@ -225,7 +225,7 @@ func TestGetOccupiedSeatsCountByGrid(t *testing.T) {
 	}
 
 	for _, e := range tests {
-		got := getOccupiedSeatsCountByGrid(e.in)
+		got := GetOccupiedSeatsCountByGrid(e.in)
 
 		if got != e.want {
 			t.Errorf("Occupied seats count was incorrect, got: %d, want: %d", got, e.want)

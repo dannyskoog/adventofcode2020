@@ -6,14 +6,19 @@ import (
 	"strings"
 )
 
+// Operation represents which action for the instruction to perform
 type Operation string
 
 const (
+	// Accumulate represents an accumulative action
 	Accumulate Operation = "acc"
-	Jump                 = "jmp"
-	None                 = "nop"
+	// Jump represents a moving action
+	Jump = "jmp"
+	// None represents a noop action
+	None = "nop"
 )
 
+// Instruction represents which operation to take and with which argument
 type Instruction struct {
 	Operation Operation
 	Argument  int
@@ -48,6 +53,7 @@ func getAccumulatedValueBeforeInstructionsAreRepeated(instructions []Instruction
 	return accumulatedValue
 }
 
+// ConvertStrArrToInstructions converts []string to []Instruction
 func ConvertStrArrToInstructions(strArr []string) []Instruction {
 	instructions := []Instruction{}
 
